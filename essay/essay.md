@@ -37,9 +37,11 @@ Ein Beispiel dazu ist in Abbildung 3 gegeben.
 Ein linearer Diskriminator führt in diesen Fällen zu einer Vielzahl an Fehlklassifikationen.
 Das Konzept der SVM kann jedoch erweitert werden,
 um auch für Anwendungen mit Daten dieser Art angewandt zu werden.
-Diese Ausarbeitung betrachtet nicht-lineare SVM.
-Dabei werden zunächst wichtige Aspekte linearer SVM wiederholt.
-<!--TODO: Kapitelübersicht-->
+Diese Ausarbeitung zielt darauf ab, nicht-lineare SVM zu motivieren
+und grundlegende Ideen zu vermitteln.
+Dabei werden zunächst wichtige Aspekte linearer SVM wiederholt,
+die als Grundlage für die Erweiterung zu nicht-linearen SVM dienen.
+Zuletzt wird ein weiterer Zugang zur Konstruktion von SVM beschrieben.
 
 ![Ein Datensatz, der nicht sinnvoll von einem linearen Diskriminator klassifiziert werden kann. Ein möglicher anderer Diskriminator ist in schwarz gegeben. Quelle: [2]](../assets/two_moons_nonlinear_separator.png){ width=50% }
 
