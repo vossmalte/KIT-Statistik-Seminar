@@ -4,7 +4,7 @@
         {
             "match": "slides\\.md$",
             // -i for incremental enumerations
-            "command": "cd ${fileDirname}; pandoc ${fileBasename} -t beamer -i -o slides.pdf",
+            "command": "cd ${fileDirname}; pandoc ${fileBasename} -t beamer -o slides.pdf",
             "runIn": "backend",
             "runningStatusMessage": "Compiling ${fileBasename}",
             "finishStatusMessage": "${fileRelative} pandoc'd"
@@ -12,10 +12,13 @@
         ,
         {
             "match": "essay\\.md$",
-            "command": "cd ${fileDirname}; pandoc ${fileBasename} --toc --template eisvogel -o essay.pdf",
+            "command": "cd ${fileDirname}; pandoc ${fileBasename} -V lang=de --toc --template eisvogel -o essay.pdf",
             "runIn": "backend",
             "runningStatusMessage": "Compiling ${fileBasename}",
             "finishStatusMessage": "${fileRelative} pandoc'd"
         }
+    ],
+    "cSpell.words": [
+        "diskriminator"
     ]
 }
