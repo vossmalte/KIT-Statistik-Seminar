@@ -286,6 +286,19 @@ $\min_f \sum_i \ell(f(x_i)) + \lambda ||\beta||^2$ mit $f(x) = \beta_0 + \Phi(x)
 
 Diese Darstellung bietet einen weiteren Zugang zu SVM und
 andere Möglichkeiten zur Konstruktion von SVM.
+*Gradient descent* ist dabei ein populäres Verfahren,
+um Lösungen für das Minimierungsproblem zu finden.
+Es wird beispielsweise auch bei künstlichen Neuronalen Netzen eingesetzt.
+*Gradient descent* ist ein iteratives Verfahren,
+die gesuchte Größe wird also schrittweise genähert.
+Allgemein lässt sich das Verfahren schreiben durch die Iterationsvorschrift
+
+$\beta_{k+1} = \beta_k + \eta g$
+
+mit $\eta$ als Schrittweite und Abstiegsrichtung $g$.
+Zur Berechnung von $g$ wird bei vielen Anwendungen der Gradient berechnet.
+Für SVM, die über den *Hinge-loss* konstruiert werden,
+verwendet man wie oben erwähnt den Subgradienten.
 
 ## Fazit
 
