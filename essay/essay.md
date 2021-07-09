@@ -109,7 +109,27 @@ Das ist äquivalent zum Minimierungsproblem von $||\beta||^2$.
 Die Lösung des Optimierungsproblems soll dabei Ungleichung 1 erfüllen.
 Wir erhalten dabei ein konvexes Optimierungsproblem,
 das mit der Methode des Lagrange-Multiplikators gelöst werden kann.
-Es liefert das optimale $\beta$ als Linearkombination von *support vectors*.
+Es liefert das optimale $\beta$ als Linearkombination von *support vectors*:
+
+$\beta = \sum_i \alpha_i y_i x_i$
+
+wobei man $\alpha_i$ als aus der Methode des Lagrange-Multiplikators erhält.
+Es gilt, dass $\alpha_i = 0$ für die meisten $i$,
+Ausnahmen sind nur die *support vectors*.
+Daraus erhält man als separierende Funktion
+
+$f(z) = \beta_0 + z^T \sum_i \alpha_i y_i x_i$
+
+Man beachte, dass zur Konstruktion von $f(z)$ das innere Produkt
+von Punkten in den Lerndaten benötigt wird.
+Das Optimierungsproblem lässt sich als *Wolfe dual problem* in Matrixschreibweise formulieren:
+
+$\max_\alpha 1_n^T \alpha - \dfrac{1}{2} \alpha^T H \alpha$ mit Nebenbedingungen $\alpha_i \geq 0, \alpha^T y = 0$
+
+wobei $H$ eine $(n \times n)$-Matrix ist mit Einträgen
+$H_{ij}=y_i y_j(x_i^T x_j)$
+
+Diese Eigenschaft wird später für nicht-lineare SVMs relevant.
 
 ### Linear nicht-separierbare Daten
 
@@ -141,21 +161,36 @@ Wir betrachten von nun an den Fall, dass ein linearer Diskriminator zur Klassifi
 Nicht-lineare SVM verwenden die Idee des *feature space*.
 Dabei werden die zu klassifizierenden Daten (*input space*) durch eine (nicht-lineare) Abbildung
 $\Phi: \mathbb{R}^r \to \mathcal{H}$ in den *feature space* $\mathcal{H}$ transformiert.
-Nach der Transformation wendet man die Verfahren der linearen SVM im *feature space* an.
-Die Klasse eines Punktes bleibt unberührt.
-Vorteile dieses Vorgehens sind beispielsweise,
-dass man linear nicht-separierbare Daten durch die Transformation separierbar machen kann.
-Weiterhin kann man auch in einen hoch- oder sogar unendlich-dimensionalen *feature space* abbilden.
-Wendet man diese Transformation auf die Eingabedaten des Klassifikationsproblems an,
-so erhält man in der separierenden Funktion und somit im Optimierungsproblem innere Produkte der Form
-$\Phi(x_i)^T \Phi(x_j)$,
-da die optimale Lösung dieses Optimierungsproblems eine Linearkombination aus *support vectors* ist.
-welche man auch allgemeiner als Skalarprodukt schreiben kann:
-$\langle \Phi(x_i), \Phi(x_j) \rangle$.
-Die Berechnung eines solchen inneren Produktes in einem hochdimensionalen $\mathcal{H}$ ist meist rechenintensiv oder für unendlich-dimensionale $\mathcal{H}$ gar unmöglich.
-Der folgende Abschnitt erläutert den Kernel Trick,
-der die Idee der Transformation in den *feature space*
-mit einfacher Berechenbarkeit kombiniert.
+Dabei bleibt die Klasse eines Punktes unberührt.
+Eine einfache Transformation für Daten im $\mathbb{R}^2$ ist
+in Abbildung 6 dargestellt.
+Mithilfe dieser Transformation ist es möglich,
+Daten, die im *input space* linear nicht separierbar sind,
+im *feature space* linear zu separieren.
+
+![Durch eine Transformation werden Daten linear separierbar gemacht. Hier werden die Vektoreinträge im *input space* quadriert.](../assets/feature_space.png)
+
+### SVM im feature space
+
+Wir wenden nun die Idee der nicht-linearen Transformation auf SVM an.
+Dabei werden im Optimierungsproblem für lineare SVMs lediglich die Punkte $x_i$ aus den Lerndaten
+durch ihre transformierten Bilder $\Phi(x_i)$ ersetzt.
+Man erhält als Optimierungsproblem
+
+$\min ||\beta||$ mit Nebenbedingung $y_i (\beta_0 + \Phi(x_i)^T \beta) \geq +1$
+
+Auch hier erhält man als Lösung eine Linearkombination von *support vectors* mit der Methode des Lagrange-Multiplikators:
+
+$\beta = \sum_i \alpha_i y_i \Phi(x_i)$
+
+Die Verwendung von Transformationen zur Abbildung in den *feature space*
+ist ein mächtiges Werkzeug zur Analyse von Daten.
+Zur Konstruktion von SVM ist -- wie im Abschnitt zu linearen SVM erwähnt --
+das Skalarprodukt der Punkte in den Lerndaten zu berechnen.
+Wird nun eine Transformation in hochdimensionale *feature spaces* angewandt,
+so ist die Berechnung dieser Skalarprodukte aufwendig.
+Eine Lösung für dieses Problem bietet der Kernel Trick,
+der im nächsten Abschnitt vorgestellt wird.
 
 ### Kernel Trick
 
@@ -172,6 +207,28 @@ $K(x_i,x_j) = \langle \Phi(x_i), \Phi(x_j) \rangle$
 Dabei ist es im Allgemeinen nicht möglich,
 von einem *Kernel* $K$ auf die zugehörige Transformation $\Phi$ zu schließen
 oder andersherum.
+Bereits 1950 zeigte Aronszajn, dass zu jedem Kernel
+eine Transformation $\Phi$ und ein *feature space* assoziiert ist.
+Dabei kann der assoziierte *feature space* sogar unendlichdimensional sein --
+mit expliziter Angabe von $\Phi$ ist das nicht möglich.
+
+Einige Methoden des Maschinellen Lernens machen Gebrauch vom Kernel Trick, darunter auch SVMs.
+Für SVM ist erfolgt die Umsetzung wie folgt:
+Im Optimierungsproblem der linearen SVM ersetzt man die inneren Produkte durch den Kernel:
+
+$\max_\alpha 1_n^T \alpha - \dfrac{1}{2} \alpha^T H \alpha$ mit Nebenbedingungen $\alpha_i \geq 0, \alpha^T y = 0$
+
+wobei $H$ eine $(n \times n)$-Matrix ist mit Einträgen
+$H_{ij}=y_i y_j K(x_i, x_j)$.
+Fasst man $K(x_i, x_j)$ als Matrix zusammen,
+so spricht man von der Kernel Matrix.
+
+Falls die Lerndaten im *feature space* nicht linear separierbar sind,
+so führt man einen Hyperparameter $C$ ein,
+der alle $\alpha_i$ in der Nebenbedingung nach oben beschränkt:
+$C \geq \alpha_i \geq 0$.
+Dieser Parameter beschränkt den Einfluss einzelner Punkte auf die Lösung des Optimierungsproblems --
+in anderen Worten: das Gewicht der einzelnen *support vectors* in $\beta$.
 
 ### Beispiele für Kernel
 
@@ -201,7 +258,7 @@ Dabei kommt der *Hinge-loss* zum Einsatz.
 Er ist definiert als $\ell(f(x_i)) = \max(0,1-y_i f(x_i))$,
 wobei $f(x_i)$ das Klassifikationsergebnis zu einem Punkt $x_i$
 mit wahrer Klasse $y_i \in \{\pm 1\}$ ist.
-Der Graph des *Hinge-loss* ist in Abbildung 6 gegeben.
+Der Graph des *Hinge-loss* ist in Abbildung 7 gegeben.
 Ist $x_i$ korrekt klassifiziert und $|f(x_i)|\geq 1$,
 so beträgt der *loss* null.
 Ist $x_i$ korrekt klassifiziert und $|f(x_i)| < 1$,
