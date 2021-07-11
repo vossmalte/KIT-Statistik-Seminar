@@ -6,29 +6,42 @@ subtitle: "Seminar Statistik -- Sommersemester 2021"
 theme: "metropolis"
 ---
 
+### Überblick
+
+- Wiederholung: Lineare SVM
+- *feature space*
+- Kernel Trick
+- SVM und Gradient descent
+
 ## Linear SVM
 
 ### Linear Support Vector Machines (SVM)
 
-- Lineare SVMs nutzen eine Hyperebene als Entscheidungsgrenze
+![Linear separierbare Daten mit Hyperebene als Diskriminator](../assets/linearly_separable_data.png){ width=50% }
 
-<!-- TODO: include graphic linear svm -->
+- nutze separierende Funktion $f(x)=\beta_0+x^T\beta$
 
 ### Linear SVM -- Margin
 
-<!-- TODO: include graphic linear svm with margin -->
-
 - Hyperebene mit maximalen Margin wird gewählt
-- Gleichung lösen //TODO
+
+![Margin veranschaulicht](../assets/margin.png){ width=50% }
+
+- Minimierungsproblem: $\min ||\beta||^2$ mit $y_i (\beta_0 + x_i^T \beta) \geq +1$
+
+### Linear SVM -- Minimierungsproblem
+
+- Minimierungsproblem: - $\min ||\beta||^2$ mit $y_i (\beta_0 + x_i^T \beta) \geq +1$
 - Lösungsverfahren: Lagrange Multipliers
+- Wolfe-Dual: $\max_\alpha 1_n^T \alpha - \dfrac{1}{2} \alpha^T H \alpha$ mit Nebenbedingungen $\alpha_i \geq 0, \alpha^T y = 0$
 
 ### Linear SVM -- linearly non-separable data
 
-<!-- TODO: include graphic linear svm nonlinear case -->
+![Linear nicht separierbare Daten](../assets/linearly_non_separable_data.png){ width=45% }
 
+- Verletzung des Margin wird erlaubt
 - Gleichung wird um slack-Variablen erweitert
-- //TODO: alte Gleichung \pause
-- //TODO: neue Gleichung
+- $\min ||\beta||^2 + C\sum_i \xi_i$ mit $y_i (\beta_0 + x_i^T \beta) \geq +1 - \xi$ und $\xi \geq 0$
 
 ## Nonlinear SVM
 
@@ -43,3 +56,13 @@ theme: "metropolis"
 ![Data set: two moons with a separator](../assets/two_moons_nonlinear_separator.png)
 
 ### Nonlinear SVM -- Basic Idea
+
+![Transformation vom *input space* in den *feature space*](../assets/feature_space.png)
+
+- Transformiere Daten zunächst in den *feature space* und wende dort lineare SVM an
+
+### Nonlinear SVM -- *feature space*
+
+- $\Phi: \mathbb{R}^r \to \mathcal{H}$ als nicht-lineare Transformation
+- alte Gleichung: $\min ||\beta||^2$ mit $y_i (\beta_0 + x_i^T \beta) \geq +1$
+- neue Gleichung: $\min ||\beta||^2$ mit $y_i (\beta_0 + \Phi(x_i)^T \beta) \geq +1$
